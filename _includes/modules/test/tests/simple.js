@@ -14,16 +14,6 @@ Simple = function(options, factory) {
   /* <!-- Internal Variables --> */
 
   /* <!-- Internal Functions --> */
-  var _key = () => {
-    var key = KEYUTIL.generateKeypair("RSA", 1024);
-    return {
-      
-      public : KEYUTIL.getPEM(key.pubKeyObj),
-      
-      private : KEYUTIL.getPEM(key.prvKeyObj, "PKCS1PRV")
-      
-    };
-  };
   /* <!-- Internal Functions --> */
     
   /* <!-- Scaffolding Functions --> */
@@ -35,7 +25,7 @@ Simple = function(options, factory) {
     /* <!-- External Functions --> */
     start: () => (
       assert = chai.assert,
-      key = _key(),
+      key = factory.App.key(),
       factory.Flags.log("START Called").reflect(true)
     ),
     

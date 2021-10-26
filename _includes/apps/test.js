@@ -50,7 +50,17 @@ App = function() {
               reject(new Error(`Test Timed Out after running for ${_time} ms`)), _time))
           ]);
         },
-        PROMISIFY = (fn, value) => new Promise(resolve => resolve(fn ? ಠ_ಠ._isF(fn) ? fn(value) : fn : true));
+        PROMISIFY = (fn, value) => new Promise(resolve => resolve(fn ? ಠ_ಠ._isF(fn) ? fn(value) : fn : true)),
+        KEY = () => {
+          var key = KEYUTIL.generateKeypair("RSA", 1024);
+          return {
+            
+            public : KEYUTIL.getPEM(key.pubKeyObj),
+            
+            private : KEYUTIL.getPEM(key.prvKeyObj, "PKCS1PRV")
+            
+          };
+        };
   /* <!-- General Functions --> */
   
   
@@ -206,6 +216,17 @@ App = function() {
   /* <!-- Settings Functions --> */
   FN.settings = {
     
+    is : {
+
+      empty : (settings) => !settings || _.every(settings, value => !value),
+
+      full : (settings) => settings && _.every(settings, value => value)
+
+    },
+
+    check : () => FN.settings.load(true)
+      .then(settings => ಠ_ಠ.Display.state().set(FN.states.client.configured, FN.settings.is.full(settings))),
+
     configure: () => FN.settings.load()
       .then(settings => ಠ_ಠ.Display.modal("settings", {
               id: "settings",
@@ -277,12 +298,11 @@ App = function() {
             memo[field.toLowerCase()] = values[field] ? values[field].Value : null;
             return memo;
           }, {}),
-          _isFull = _.every(_settings, value => value),
-          _isEmpty = _.every(_settings, value => !value);
+          _isEmpty = FN.settings.is.empty(_settings);
         
           ಠ_ಠ.Flags.log(`Test Settings to Save [Empty=${_isEmpty}]`, _settings);
         
-          ಠ_ಠ.Display.state().set(FN.states.client.configured, _isFull);
+          ಠ_ಠ.Display.state().set(FN.states.client.configured, FN.settings.is.full(_settings));
           
           if (values.Persist && values.Persist.Value === true) {
             ಠ_ಠ.Flags.log("Persisting Settings to App Configuration");
@@ -304,18 +324,18 @@ App = function() {
         SCOPE_DRIVE_FILE,
         SCOPE_SCRIPT_PROJECTS,
         SCOPE_SCRIPT_DEPLOYMENTS
-      ]).then(result => result === true ? FN.configuration.get().then(FN.settings.process)
+      ], true).then(result => result === true ? FN.configuration.get().then(FN.settings.process)
             .catch(e => ಠ_ಠ.Flags.error("Processing Test Settings", e))
             .then(ಠ_ಠ.Main.busy("Processing Settings", true)) : false),
 
     
-    load: () => ಠ_ಠ.Main.authorise(SCOPE_DRIVE_APPDATA)
+    load: (silently) => ಠ_ಠ.Main.authorise(SCOPE_DRIVE_APPDATA, false, silently)
     
       .then(result => result === true ? FN.configuration.load()
             .catch(e => ಠ_ಠ.Flags.error("Loading Test Settings", e))
-            .then(ಠ_ಠ.Main.busy("Loading Settings", true)) : false),
+            .then(silently ? ಠ_ಠ.Main.deadend(true) : ಠ_ಠ.Main.busy("Loading Settings", true)) : false),
 
-    process : settings => {
+    process : (settings) => {
       if (!settings || !settings.script) return null;
       return Promise.all([
         ಠ_ಠ.Google.scripts.deployments(settings.script).list(),
@@ -325,6 +345,7 @@ App = function() {
         if (!results || !results[0] || !results[1]) return;
         var _settings = {
           ALGORITHM : settings.algorithm,
+          CLIENT: settings.client,
           KEY : settings.key,
           OWNER : results[1].creator.email,
           ID : _.chain(results[0])
@@ -339,7 +360,7 @@ App = function() {
         ಠ_ಠ.Flags.log("Client Test Settings", _settings);
         return (ರ‿ರ.settings = _settings);
       });
-    },
+    }
     
   };
   /* <!-- Settings Functions --> */
@@ -348,7 +369,7 @@ App = function() {
   /* <!-- Setup Functions --> */
   FN.setup = {
 
-    modules: ["Common", "Configuration", "Client", "Sheet"],
+    modules: ["Common", "Configuration", "Client", "Sheet", "Generate"],
     
     initialise: () => {
       ಠ_ಠ.total = 0;
@@ -426,6 +447,9 @@ App = function() {
 
         /* <!-- Handle Highlights --> */
         ಠ_ಠ.Display.highlight();
+
+        /* <!-- Check for configured settings --> */
+        DELAY(100).then(FN.settings.check);
 
         return true;
       };
@@ -552,7 +576,11 @@ App = function() {
     
     random: RANDOM,
 
+    round: (value) => Math.round(value) / 1000,
+
     simplify: SIMPLIFY,
+
+    key: KEY
 
 	};
 

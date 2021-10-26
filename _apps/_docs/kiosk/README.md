@@ -1,0 +1,1 @@
+{% include page.html large=true class="kiosk" %}

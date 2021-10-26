@@ -183,3 +183,5 @@ globals:
   Code: true
   Sheet: true
   Simple: true
+  Generate: true
+  Performance: true

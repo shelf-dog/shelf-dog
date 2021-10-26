@@ -1,0 +1,133 @@
+###############################################################
+#                                                             #
+#   88      a8P  88   ,ad8888ba,    ad88888ba  88      a8P    #
+#   88    ,88'   88  d8"'    `"8b  d8"     "8b 88    ,88'     #
+#   88  ,88"     88 d8'        `8b Y8,         88  ,88"       #
+#   88,d88'      88 88          88 `Y8aaaaa,   88,d88'        #
+#   8888"88,     88 88          88   `"""""8b, 8888"88,       #
+#   88P   Y8b    88 Y8,        ,8P         `8b 88P   Y8b      #
+#   88     "88,  88  Y8a.    .a8P  Y8a     a8P 88     "88,    #
+#   88       Y8b 88   `"Y8888Y"'    "Y88888P"  88       Y8b   #                                                   
+#                                                             #
+###############################################################
+
+name: Kiosk
+link: /app/kiosk/
+css:
+  primary:
+  secondary:
+    - material/menu
+    - material/general
+    - material/dialogs
+    - custom/mixins/transitions
+    - custom/mixins/gradients
+    - custom/variables
+    - custom/tables
+    - custom/modals
+    - custom/reader
+imports:
+  - name: underscore
+    load: first
+  - name: jquery_slim
+    load: first
+  - name: popper
+    load: first
+  - name: day
+    load: first
+  - name: handlebars
+    load: last
+  - name: hello
+    load: last
+  - name: uri-js
+    load: last
+  - name: bootstrap-js
+    load: last
+  - name: mousetrap
+    load: last
+  - name: hammer
+    load: last
+  - name: waves-css
+    load: last
+  - name: waves-js
+    load: last
+  - name: localforage
+    load: last
+  - name: fetchjsonp
+    load: last
+  - name: spark-md5
+    load: last
+  - name: rsvp
+    load: last
+  - name: uuid
+    load: last
+  - name: screenfull
+    load: last
+  - name: google
+    load: lazy
+helpers:
+  - network
+  - strings
+  - google
+  - css
+  - data
+  - fields
+  - dialog
+  - colours
+  - handlebars
+  - backgrounds
+  - network
+  - url
+modules:
+  - generic/dates
+  - generic/flags
+  - generic/controller
+  - generic/display
+  - generic/service
+  - generic/main
+  - generic/router
+  - shared/states
+  - shared/events
+  - shared/common
+  - shared/client
+  - shared/cache
+  - shared/libraries
+  - shared/select
+  - shared/pwa
+  - shared/books
+  - shared/hookup
+  - library/catalog
+  - library/lexer
+scripts: 
+  - extends/string
+  - extends/regex
+  - extends/array
+  - extends/math
+  - extends/promises
+templates:
+  - loader
+  - generic/alert
+  - generic/confirm
+  - generic/choose
+  - generic/text
+  - shared/dialog
+  - shared/selector
+docs:
+  - shared/PUBLIC
+  - shared/FEATURES
+  - shared/INSTRUCTIONS
+  - shared/TUTORIALS
+  - kiosk/README
+scopes:
+  google:
+    - scope: email
+      name: View your email address
+      reason: In order to display the address of your logged in account on the navigation menu, once you have signed in.
+      request: login
+    - scope: profile
+      name: View your basic profile info
+      reason: In order to display your name on the navigation menu, once you have signed in.
+      request: login
+keys:
+  google: 
+      oauth: 360726457079-6a2vd6g9c6rorg72aslrqapqd31tjtm2.apps.googleusercontent.com
+published: true

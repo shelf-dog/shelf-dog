@@ -105,6 +105,7 @@ modules:
   - subscribed/sheet
   - test/configuration
   - test/client
+  - test/generate
 scripts: 
   - extends/regex
   - extends/array

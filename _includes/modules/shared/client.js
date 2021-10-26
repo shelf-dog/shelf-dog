@@ -58,7 +58,7 @@ Client = (options, factory) => {
       /* <!-- Do we need to refresh our user token? --> */
       .then(response => response && response.refresh === true ? FN.endpoints()
             .then(all => {
-              var _refreshed = _.find(all, single => single && single.id == endpoint);
+              var _refreshed = _.find(all.endpoints || all, single => single && single.id == endpoint);
               factory.Flags.log("API | Refreshed Endpoint", _refreshed);
               if (_refreshed) {
                 user = _refreshed.user;
