@@ -101,8 +101,9 @@ Performance = function(options, factory) {
 
         });
 
-      } catch (err) {
-        throw err;
+      } catch (e) {
+        factory.Flags.error("Performance Error", e);
+        throw e;
       }
       
     };

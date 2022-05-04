@@ -58,6 +58,15 @@
         </div>
         <small id="settings_capabilities_loan_HELP" class="form-text text-muted"></small>
       </div>
+
+      <!-- KIOSK AVAILABLE -->
+      <div class="form-group form-check pl-2" data-output-field="capabilities_loan_kiosk">
+        <div class="custom-control custom-checkbox mr-sm-2">
+            <input type="checkbox" class="custom-control-input" id="settings_capabilities_loan_kiosk" data-output-name="Value" data-output-always="true"{{#if capabilities_loan_kiosk}} checked{{/if}}>
+            <label class="custom-control-label" for="settings_capabilities_loan_kiosk">Is Kiosk Mode available with this Library?</label>
+        </div>
+        <small id="settings_capabilities_loan_kiosk_HELP" class="form-text"></small>
+      </div>
       
       <!-- LOAN COPY FIELD IDENTIFIER -->
       <div class="form-group mb-1" data-output-field="capabilities_loan_field">

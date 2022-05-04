@@ -29,26 +29,28 @@ PWA = (options, factory) => {
   
   var _exit = () => factory.Display.state().enter(options.functions.states.fullscreen.enabled);
     
-  var _setup = () => {
+  var _setup = (element) => {
     
-    /* <!-- Handle Full Screen Clicks --> */
-    $("header [data-fullscreen] a")
-      .off("click.fullscreen")
-      .on("click.fullscreen", e => {
-        e.preventDefault();
-        e.stopPropagation();
-        screenfull.request().then(_enter).catch(_exit);
-      });
-    
+    if (element && _.isString(element)) element = document.getElementById(element);
+
     /* <!-- Watch for External Changes --> */
     screenfull.on("change", () => {
       factory.Display.state().set(options.functions.states.fullscreen.enabled, screenfull.isFullscreen);
-      if (screenfull.isFullscreen) _available(false);
+      if (screenfull.isFullscreen && !element) _available(false);
     });
-    
+
+    /* <!-- Handle Full Screen Clicks --> */
+    $("header [data-fullscreen] a")
+    .off("click.fullscreen")
+    .on("click.fullscreen", e => {
+      e.preventDefault();
+      e.stopPropagation();
+      screenfull.request(element).then(_enter).catch(_exit);
+    });
+
     /* <!-- Show Available for a period of time --> */
     _available(true);
-    options.functions.common.delay(options.delay).then(_available);
+    if (!element) options.functions.common.delay(options.delay).then(_available);
     
   };
   /* <!-- Internal Functions --> */
@@ -58,7 +60,7 @@ PWA = (options, factory) => {
   /* <!-- Public Functions --> */
   
   /* <!-- Initial Functions --> */
-  _standalone() || factory.Flags.development() ? _setup() : null;
+  _standalone() || factory.Flags.development() || options.fullscreen ? _setup(options.fullscreen) : null;
   /* <!-- Initial Functions --> */
   
   return FN;

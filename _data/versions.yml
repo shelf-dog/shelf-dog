@@ -10,6 +10,16 @@
 ###############################################
 
 site :
+  0.0.9o :
+    name : Site v0.0.9o
+    desc : Minor Updates
+    numeric : 0.0.9.18
+    api : 1.9.7
+    type:
+      - alpha
+    changes :
+      - Updated Tests
+      - New Build Process
   0.0.9n :
     name : Site v0.0.9n
     desc : Minor Updates

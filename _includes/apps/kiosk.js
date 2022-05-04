@@ -27,7 +27,7 @@ App = function() {
   /* <!-- Setup Functions --> */
   FN.setup = {
 
-    modules: ["Cache", "Client", "Libraries"],
+    modules: ["Common", "Cache", "Client", "Libraries", "PWA", "Hookup"],
     
     /* <!-- Setup required for everything, almost NOTHING is loaded at this point (e.g. ಠ_ಠ.Flags) --> */
     now: () => {
@@ -64,7 +64,8 @@ App = function() {
         state: {
           session: ರ‿ರ,
           application: ಱ
-        }
+        },
+        fullscreen: "content"
       };
       _.each(FN.setup.modules, module => FN[module.toLowerCase()] = ಠ_ಠ[module](_options, ಠ_ಠ));
 

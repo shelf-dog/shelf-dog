@@ -200,84 +200,95 @@ App = function() {
         clear: true
       }, _search.process(results)));
       
-      if (_hasFilter) (ಠ_ಠ.Flags.log("Filters:", _filters), _.each(_filters, (filter, key) => {
-        if (filter.range) {
-          
-          var _filter = _return[0].querySelector(`#filter_${key}`),
-              _input = _filter.querySelector(".custom-slider"),
-              _index = results.columns ? results.columns.indexOf(filter.name) : null,
-              _reset = _filter.querySelector("[data-action='reset']"),
-              _values = _return.find(".values");
-          
-          if (_index >= 0) {
+      if (_hasFilter) {
+        ಠ_ಠ.Flags.log("Filters:", _filters);
+        var _filtered = _.reduce(_filters, (memo, filter, key) => {
+          if (filter.range) {
             
-            var _all = _.chain(results.values).pluck(_index).compact().value(),
-                _lower = _.min(_all),
-                _upper = _.max(_all),
-                _min = Math.min(0, _lower),
-                _max = Math.ceil(Math.round(_upper / 10)) * 10,
-                _step = _max / 100;
+            var _filter = _return[0].querySelector(`#filter_${key}`),
+                _input = _filter.querySelector(".custom-slider"),
+                _index = results.columns ? results.columns.indexOf(filter.name) : null,
+                _reset = _filter.querySelector("[data-action='reset']"),
+                _values = _return.find(".values");
             
-            ಠ_ಠ.Flags.log(`Range Filter for ${filter.name}`, {
-              count: _all.length,
-              lower: _lower,
-              upper: _upper,
-              min: _min,
-              max: _max,
-              step: _step
-            });
-            
-            noUiSlider.create(_input, {
-              start: [_lower, _upper],
-              tooltips: [true, true],
-              connect: true,
-              range: {
-                  "min": _min,
-                  "max": _max
-              },
-              step: _step,
-            });
-            
-            var _called = [],
-                _update = _.debounce(values => {
-                  var _filtered = _.filter(_search.process(results).values, 
-                                      value => value[_index] >= values[0] && value[_index] <= values[1]);
-                  $(".filtered-results").remove();
-                  ಠ_ಠ.Display.template.show({
-                    template: "filter_header",
-                    target: $(".results-header"),
-                    count: _filtered.length,
-                    prepend: true,
-                  });
-                  ಠ_ಠ.Display.template.show({
-                    template: "values",
-                    target: _values,
-                    values: _filtered,
-                    clear: true
-                  });
-                }, 100);
-            
-            $(_reset).on("click.reset", () => {
-              _called = [];
-              _input.noUiSlider.reset();
-              $(".filtered-results").remove();
-              ಠ_ಠ.Display.template.show({
-                template: "values",
-                target: _values,
-                values: _search.process(results).values,
-                clear: true
+            if (_index >= 0) {
+              
+              var _all = _.chain(results.values).pluck(_index).compact().value(),
+                  _lower = _.min(_all),
+                  _upper = _.max(_all),
+                  _min = Math.min(0, _lower),
+                  _max = Math.ceil(Math.round(_upper / 10)) * 10,
+                  _step = _max / 100;
+              
+              ಠ_ಠ.Flags.log(`Range Filter for ${filter.name}`, {
+                count: _all.length,
+                lower: _lower,
+                upper: _upper,
+                min: _min,
+                max: _max,
+                step: _step
               });
-            });
-            
-            _input.noUiSlider.on(`update.${key}`, 
-              (values, handle) => _called[handle] ? _update(values) : (_called[handle] = true));
-            
-          } else {
-            _filter.classList.add("d-none");
+              
+              noUiSlider.create(_input, {
+                start: [_lower, _upper],
+                tooltips: [true, true],
+                connect: true,
+                range: {
+                    "min": _min,
+                    "max": _max
+                },
+                step: _step,
+              });
+              
+              var _called = [],
+                  _update = _.debounce(values => {
+                    var _filtered = _.filter(_search.process(results).values, 
+                                        value => value[_index] >= values[0] && value[_index] <= values[1]);
+                    $(".filtered-results").remove();
+                    ಠ_ಠ.Display.template.show({
+                      template: "filter_header",
+                      target: $(".results-header"),
+                      count: _filtered.length,
+                      prepend: true,
+                    });
+                    ಠ_ಠ.Display.template.show({
+                      template: "values",
+                      target: _values,
+                      values: _filtered,
+                      clear: true
+                    });
+                  }, 100);
+              
+              $(_reset).on("click.reset", () => {
+                _called = [];
+                _input.noUiSlider.reset();
+                $(".filtered-results").remove();
+                ಠ_ಠ.Display.template.show({
+                  template: "values",
+                  target: _values,
+                  values: _search.process(results).values,
+                  clear: true
+                });
+              });
+              
+              _input.noUiSlider.on(`update.${key}`, 
+                (values, handle) => _called[handle] ? _update(values) : (_called[handle] = true));
+              
+              return true;
+              
+            } else {
+
+              _filter.classList.add("d-none");
+              return memo;
+
+            }
           }
-        }
-      }));
-      
+        }, null);
+
+        if (!_filtered) _return[0].classList.add("d-none");
+
+      }
+
       return _return;
     },
     
