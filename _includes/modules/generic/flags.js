@@ -101,7 +101,7 @@ Flags = function() {
     _page = _url.hasQuery(MATCH.page) && _value(MATCH.page) === null;
 
     _base = _url.protocol() + "://" + _url.hostname() +
-      (_url.port() && _url.port() != 80 && _url.port() != 443 ? ":" + _url.port() : "") + "/";
+      (_url.port() && _url.port() != 80 && _url.port() !== 443 ? ":" + _url.port() : "") + "/";
 
     _dir = _url.directory().split("/").pop();
 

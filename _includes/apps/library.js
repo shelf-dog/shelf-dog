@@ -622,8 +622,8 @@ App = function() {
       },
       tidy : true,
       fn : command => command && _.isArray(command) ? 
-          command.length == 2 ? _library(command[0], command[1]) : 
-            command.length == 3 ? _library(command[0])
+          command.length === 2 ? _library(command[0], command[1]) : 
+            command.length === 3 ? _library(command[0])
               .then(() => command[1] && command[1].toLowerCase() == "search" ?
                       _search.basic(command[2], _holder()) : null) : 
           _library(command) : _library(command),

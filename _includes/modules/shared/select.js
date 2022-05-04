@@ -68,7 +68,7 @@ Select = (options, factory) => {
         if (_valid) {
 
           var _href = _button.attr("href").split(",");
-          if (_href.length == 2) {
+          if (_href.length === 2) {
             _href[1] = _value;
             _button.attr("href", _href.join(","));
           }

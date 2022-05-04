@@ -64,7 +64,7 @@ Filters = (options, factory) => {
         _condition_Normal[field] = _createFilter(filters[field]);
         /* <!-- If the 'normal' version of the property is not a primitive data type, e.g. it is an object, it won't match! --> */
         _condition_Normal = {"$and" : [_condition_Primitive, _condition_Normal]};
-        _condition_Complex[options.complex == true ? 
+        _condition_Complex[options.complex === true ? 
                            `$$${field.replace(/^_+/, "")}` : 
                            `${options.complex}${field.replace(/^_+/, "")}`] = _createFilter(filters[field]);
         _condition = field.indexOf("__") === 0 ? _condition_Complex : {

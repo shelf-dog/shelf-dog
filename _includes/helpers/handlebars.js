@@ -74,7 +74,7 @@ Handlebars = (options, factory) => {
   var _template = (name, raw) => Handlebars.templates === undefined || Handlebars.templates[name] === undefined ?
       _compile(name, raw) : Handlebars.templates[name];
   
-  var _username = name => name && name.length == 3 ? name.split(" ").join("") : name;
+  var _username = name => name && name.length === 3 ? name.split(" ").join("") : name;
   
   var _start = () => {
     

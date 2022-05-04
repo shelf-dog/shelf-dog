@@ -229,7 +229,7 @@ App = function() {
       fn : command => {
         if (ಠ_ಠ.Display.state().in(FN.states.reader.loaded)) return;
         var _run = () => _read(command[0], command[1], command[2], FN.decode(command[3]), FN.decode(command[4]));
-        return (_.isArray(command) && command.length == 6 && (command[5] / 1024 / 1024) > 10) ?
+        return (_.isArray(command) && command.length === 6 && (command[5] / 1024 / 1024) > 10) ?
           ಠ_ಠ.Display.confirm({
             id: "reader_confirm",
             target: $("body"),

@@ -88,7 +88,7 @@ Hookup = (options, factory) => {
             _img.onerror = () => reject(_img);
           });
         })
-        .then(img => !img.complete || (typeof img.naturalWidth != "undefined" && img.naturalWidth == 0) ? 
+        .then(img => !img.complete || (typeof img.naturalWidth != "undefined" && img.naturalWidth === 0) ? 
                 _retry(img) : img)
         .catch(_retry);
       
